@@ -1,0 +1,168 @@
+---
+title: "Pedro Theiss"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(tidyverse)
+library(WDI)
+
+options(scipen = 999) # REMOVER A NOT. CIENT.
+# DADOS EM PAINEL
+dadospib <- WDI(country = 'all',
+                indicator = 'BX.GSR.ROYL.CD')
+
+paises <- c('BR', 'US')
+
+dadospibbrus <- WDI(country = paises,
+                    indicator = 'BX.GSR.ROYL.CD')
+
+# CORTE TRANSVERSAL
+dadospib2023 <- WDI(country = 'all',
+                    indicator = 'BX.GSR.ROYL.CD',
+                    start = 2023, end = 2023)
+
+# SÉRIE TEMPORAL
+dadospibbr <- WDI(country = 'BR',
+                  indicator = 'BX.GSR.ROYL.CD')
+```
+
+## BX.GSR.ROYL.CD - Receitas de exportação de petróleo, gás e minerais
+
+A variável que estamos analisando, BX.GSR.ROYL.CD, representa as receitas de petróleo e royalties de um país. Essa variável é uma medida das receitas geradas pelos direitos sobre a exploração de recursos naturais, como o petróleo, que são transferidos para os governos, geralmente em forma de royalties, impostos ou outras formas de compensação financeira.
+
+Os dados estão sendo obtidos do Banco Mundial, por meio da base de dados chamada World Development Indicators (WDI), que contém dados de economia global, incluindo receitas de recursos naturais de vários países.
+
+A medida utilizada para essa variável é em dólares americanos (US$). As receitas de petróleo e royalties são expressas em bilhões de dólares ou milhões de dólares, dependendo da escala aplicada no gráfico.
+  
+## GRÁFICO DE DADOS EM PAINEL
+  
+  Este gráfico apresenta a evolução das receitas de petróleo e royalties, ao longo do tempo para os 10 países com maior arrecadação desse tipo de receita desde 1980.
+
+```{r}
+#| label: dadospib
+#| warning: false
+#| echo: false
+
+library(scales)
+library(dplyr)
+library(ggplot2)
+
+# Lista de regiões a excluir
+regioes <- c("World", "East Asia & Pacific", "Europe & Central Asia",
+             "Latin America & Caribbean", "Middle East & North Africa",
+             "North America", "South Asia", "Sub-Saharan Africa", 
+             "European Union", "Arab World", "Low income", 
+             "Upper middle income", "Lower middle income", 
+             "High income", "OECD members", "Post-demographic dividend", 
+             "Late-demographic dividend", "IDA & IBRD total", "IBRD only",
+             "Euro area", "Low & middle income", "Middle income", 
+             "East Asia & Pacific (excluding high income)", 
+             "East Asia & Pacific (IDA & IBRD countries)")
+
+# Selecionando os 10 países com maiores receitas
+top_10_paises <- dadospib %>%
+  filter(!is.na(BX.GSR.ROYL.CD), 
+         year >= 1980,
+         !(country %in% regioes)) %>%  # Excluindo regiões
+  group_by(country) %>%
+  summarise(total_receitas = sum(BX.GSR.ROYL.CD, na.rm = TRUE)) %>%
+  arrange(desc(total_receitas)) %>%
+  slice_head(n = 10) %>%
+  pull(country)
+
+# Filtrando apenas os dados dos 10 países
+dados_top10 <- dadospib %>% 
+  filter(country %in% top_10_paises, year >= 1980)
+
+# Plotando o gráfico
+ggplot(dados_top10, aes(x = year, y = BX.GSR.ROYL.CD, color = country)) +
+  geom_line(size = 1.5, alpha = 0.7) +  # Linhas mais grossas
+  geom_smooth(method = "loess", se = FALSE, size = 1) +  # Linha de tendência por país
+  labs(title = "Top 10 Países em Receitas de Petróleo e Royalties (1980-Atual)",
+       subtitle = "Evolução das receitas para os 10 maiores países",
+       x = "Ano", y = "Receitas (US$ bilhões)",
+       caption = "Fonte: Banco Mundial (WDI)") +
+  scale_y_continuous(labels = label_number(scale = 1e-9, accuracy = 0.1, suffix = "B")) +
+  scale_color_brewer(palette = "Set3") +  # Paleta de cores amigável
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(face = "bold", size = 18),
+        plot.subtitle = element_text(size = 14),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        legend.title = element_blank())
+```
+
+## GRÁFICO DE DADOS DE CORTE TRANSVERSAL
+
+Este gráfico apresenta os 10 países com as maiores receitas de petróleo e royalties no ano de 2023.
+
+```{r}
+#| label: dadospib2023
+#| warning: false
+#| echo: false
+
+library(scales)
+library(ggplot2)
+library(dplyr)
+
+# Define as regiões que queremos excluir
+regioes <- c("World", "East Asia & Pacific", "Europe & Central Asia",
+             "Latin America & Caribbean", "Middle East & North Africa",
+             "North America", "South Asia", "Sub-Saharan Africa", 
+             "European Union", "Arab World", "Low income", 
+             "Upper middle income", "Lower middle income", 
+             "High income", "OECD members", "Post-demographic dividend", 
+             "Late-demographic dividend", "IDA & IBRD total", "IBRD only",
+             "Euro area", "Low & middle income", "Middle income", 
+             "East Asia & Pacific (excluding high income)", 
+             "East Asia & Pacific (IDA & IBRD countries)")
+
+# Gráfico
+ggplot(dadospib2023 %>% 
+         filter(!is.na(BX.GSR.ROYL.CD), 
+                !(country %in% regioes)) %>%  # Excluindo regiões
+         arrange(desc(BX.GSR.ROYL.CD)) %>%
+         slice_head(n = 10),
+       aes(x = reorder(country, -BX.GSR.ROYL.CD), y = BX.GSR.ROYL.CD)) +
+  geom_col(fill = "coral") +
+  geom_hline(yintercept = 150e9, linetype = "dashed", color = "blue", size = 1) +  # Linha 150B
+  labs(title = "Top 10 Países em Receitas de Petróleo e Royalties (2023)",
+       subtitle = "Somente países individuais",
+       x = "País", y = "Receitas (US$ bilhões)") +
+  scale_y_continuous(labels = label_number(scale = 1e-9, accuracy = 0.1, suffix = "B")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
+
+## GRÁFICO DE DADOS DE SÉRIE TEMPORAL
+
+Esse ultimo gráfico mostra a evolução ao longo do tempo das receitas de petróleo e royalties no Brasil, desde o ano de 1975 até o dado mais recente disponível.
+
+```{r}
+#| label: dadospibbr
+#| warning: false
+#| echo: false
+
+library(scales)
+library(ggplot2)
+library(dplyr)
+
+ggplot(dadospibbr %>% 
+         filter(!is.na(BX.GSR.ROYL.CD), year >= 1975),  # Filtra a partir de 1975
+       aes(x = year, y = BX.GSR.ROYL.CD)) +
+  geom_line(color = "darkgreen", size = 1) +
+  geom_point(color = "darkgreen") +
+  geom_hline(yintercept = 1100000000, linetype = "dashed", color = "red", size = 0.8) +  # Linha para 1,1 bilhão
+  annotate("text", x = 1977, y = 1100000000,  # Ajuste x manualmente para 1977 (1975 + 2 anos)
+           label = "1,1 Bilhão", vjust = -1, color = "red", size = 4) +
+  labs(title = "Receitas de Petróleo e Royalties no Brasil",
+       subtitle = "Evolução anual desde 1975",
+       x = "Ano", y = "Receitas (US$ milhões)") +
+  scale_y_continuous(labels = label_number(scale = 1e-6, accuracy = 0.1, suffix = "M")) +  # Em milhões
+  theme_minimal()
+```
