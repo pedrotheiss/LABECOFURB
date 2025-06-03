@@ -5,7 +5,7 @@ library(gganimate)
 library(scales)
 library(lubridate)
 
-# Buscar série CDI do BCB
+# Buscar série PIB do BCB
 my.id <- c(tcpib = 3711)
 
 df.bcb <- gbcbd_get_series(
@@ -27,10 +27,10 @@ p <- ggplot(df.bcb, aes(x = ref.date, y = value)) +
   geom_point(color = "#117A65", size = 1.5) +
   scale_y_continuous(labels = label_percent(scale = 1)) +
   labs(
-    title = 'Evolução da Taxa CDI no Brasil',
+    title = 'taxa de crescimento do PIB real - Estados Unidos',
     subtitle = 'Data: 1970-2015',
     x = 'Ano',
-    y = 'Taxa de Juros CDI (% a.d.)',
+    y = 'taxa de crescimento do PIB real (% a.d.)',
     caption = paste0('Período: ', format(min(df.bcb$ref.date), "%d/%m/%Y"), 
                      ' até ', format(max(df.bcb$ref.date), "%d/%m/%Y"))
   ) +
@@ -56,6 +56,6 @@ p <- ggplot(df.bcb, aes(x = ref.date, y = value)) +
 )
 
 # Salvar como GIF
- anim_save("grafico_animado_CDI.gif", animation = animacao)
+ anim_save("grafico_animado_PIB.gif", animation = animacao)
 
  
