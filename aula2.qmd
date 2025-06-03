@@ -1,0 +1,89 @@
+---
+title: "Pedro Theiss"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(GetBCBData)
+library(tidyverse)
+library(gganimate)
+library(scales)
+library(lubridate)
+
+# Buscar série CDI do BCB
+my.id <- c(tcpib = 3711)
+
+df.bcb <- gbcbd_get_series(
+  id = my.id,
+  first.date = '1970-12-31',  # Você pode ajustar aqui a data inicial
+  last.date = '2015-01-01',     # Até a data atual
+  format.data = 'long',
+  use.memoise = TRUE,
+  cache.path = tempdir(),
+  do.parallel = FALSE
+)
+
+# Conferir os dados
+glimpse(df.bcb)
+```
+
+## **Introdução – Taxa CDI (Certificado de Depósito Interbancário)**
+
+A **Taxa CDI (Certificado de Depósito Interbancário)**, identificada pelo código **3711** no Sistema Gerenciador de Séries Temporais (SGS) do Banco Central do Brasil, é uma das principais referências para o mercado financeiro brasileiro. Ela representa a **taxa média de juros das operações interbancárias de um dia útil**, sendo utilizada majoritariamente em transações entre instituições financeiras de diferentes conglomerados.
+
+Por sua estabilidade e representatividade, a taxa CDI é amplamente adotada como **benchmark** para investimentos de renda fixa, tais como CDBs, fundos DI e diversos outros produtos financeiros. Sua evolução ao longo do tempo reflete a condução da política monetária brasileira e o comportamento das taxas de juros no mercado interbancário.
+
+## **Evolução da Taxa CDI**
+
+O gráfico apresentado mostra a **evolução temporal da Taxa CDI (Certificado de Depósito Interbancário)** no Brasil, no período compreendido entre **31/12/1970 e 01/01/2015**, conforme os dados oficiais disponibilizados pelo Banco Central (código 3711 do SGS).
+
+A linha animada representa a **variação diária da taxa**, permitindo visualizar com fluidez as **mudanças no comportamento da política monetária** ao longo das décadas. A animação destaca, de forma cronológica, os principais ciclos de **alta e queda dos juros**, revelando o impacto de fatores como inflação, recessões, reformas econômicas e decisões do Comitê de Política Monetária (Copom).
+
+Entre os períodos de destaque, observa-se:
+
+-   Fortes oscilações nos anos 1980 e início dos 1990, marcadas por hiperinflação e instabilidade econômica;
+
+-   Redução progressiva da taxa a partir dos anos 2000, em função da consolidação do regime de metas de inflação;
+
+-   Picos de elevação em momentos de crise, como em 2002 (crise eleitoral/câmbio) e em 2008 (crise financeira global).
+
+O uso de pontos sobre a linha reforça visualmente cada observação temporal, enquanto a legenda dinâmica apresenta a **data exata** de cada ponto ao longo da animação. A escala vertical foi ajustada para exibir as taxas em **valores reais percentuais ao dia**, facilitando a interpretação precisa dos dados.
+
+Esse tipo de visualização torna o comportamento histórico da taxa CDI **mais intuitivo, acessível e visualmente envolvente**, sendo uma ferramenta eficaz tanto para análise acadêmica quanto para apresentações didáticas.
+
+```{r}
+#| label: dadospib
+#| warning: false
+#| echo: false
+ggplot(df.bcb, aes(x = ref.date, y = value)) +
+  geom_line(color = "#2E86C1", size = 1.2) +
+  geom_point(color = "#117A65", size = 1.5) +
+  scale_y_continuous(labels = label_percent(scale = 1)) +
+  labs(
+    title = 'Evolução da Taxa CDI no Brasil',
+    subtitle = 'Data: 1970-2015',
+    x = 'Ano',
+    y = 'Taxa de Juros CDI (% a.d.)',
+    caption = paste0('Período: ', format(min(df.bcb$ref.date), "%d/%m/%Y"), 
+                     ' até ', format(max(df.bcb$ref.date), "%d/%m/%Y"))
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(size = 14, hjust = 0.5),
+    plot.caption = element_text(size = 10),
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 14)
+  ) +
+  transition_reveal(ref.date)
+```
+
+```{r}
+
+```
+
+## 
