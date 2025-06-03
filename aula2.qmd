@@ -31,29 +31,34 @@ df.bcb <- gbcbd_get_series(
 glimpse(df.bcb)
 ```
 
-## **Introdução – Taxa CDI (Certificado de Depósito Interbancário)**
+**Taxa de crescimento do PIB real - Estados Unidos**
 
-A **Taxa CDI (Certificado de Depósito Interbancário)**, identificada pelo código **3711** no Sistema Gerenciador de Séries Temporais (SGS) do Banco Central do Brasil, é uma das principais referências para o mercado financeiro brasileiro. Ela representa a **taxa média de juros das operações interbancárias de um dia útil**, sendo utilizada majoritariamente em transações entre instituições financeiras de diferentes conglomerados.
+A **Taxa de crescimento do PIB real - Estados Unidos**, com seu código **3711** no Sistema Gerenciador de Séries Temporais (SGS) do Banco Central do Brasil, é considerada uma das principais referências no desempenho econômico norte-americano. Ela representa a **variação percentual do Produto Interno Bruto ajustado pela inflação**, ou seja, o crescimento efetivo da economia em termos reais, desconsiderando os efeitos dos preços.
 
-Por sua estabilidade e representatividade, a taxa CDI é amplamente adotada como **benchmark** para investimentos de renda fixa, tais como CDBs, fundos DI e diversos outros produtos financeiros. Sua evolução ao longo do tempo reflete a condução da política monetária brasileira e o comportamento das taxas de juros no mercado interbancário.
+Por sua relevância global, a taxa de crescimento do PIB real dos EUA é constantemente acompanhada por analistas, investidores e formuladores de políticas econômicas. Ela tem influencia em decisões de investimento, expectativas sobre política monetária do Federal Reserve e movimentos nos mercados internacionais.
 
-## **Evolução da Taxa CDI**
+A observação dessa taxa ao longo do tempo permite identificar ciclos econômicos como expansões, recessões, crises e recuperações. Além disso, oferece uma visão clara da dinâmica macroeconômica dos Estados Unidos, sendo um parâmetro essencial para análises comparativas e projeções econômicas.
 
-O gráfico apresentado mostra a **evolução temporal da Taxa CDI (Certificado de Depósito Interbancário)** no Brasil, no período compreendido entre **31/12/1970 e 01/01/2015**, conforme os dados oficiais disponibilizados pelo Banco Central (código 3711 do SGS).
+**Evolução da Taxa de Crescimento do PIB Real – Estados Unidos**
+O gráfico apresentado mostra a evolução da taxa de crescimento do Produto Interno Bruto (PIB) real dos Estados Unidos, entre 31/12/1970 e 01/01/2015, conforme os dados disponibilizados por meio do Sistema Gerenciador de Séries Temporais (SGS) do Banco Central do Brasil.
 
-A linha animada representa a **variação diária da taxa**, permitindo visualizar com fluidez as **mudanças no comportamento da política monetária** ao longo das décadas. A animação destaca, de forma cronológica, os principais ciclos de **alta e queda dos juros**, revelando o impacto de fatores como inflação, recessões, reformas econômicas e decisões do Comitê de Política Monetária (Copom).
+A linha animada representa a variação percentual da economia norte-americana ao longo do tempo, permitindo enxergarmos com clareza os principais ciclos econômicos que ficaram marcadas na história do país. A animação revela, em ordem cronológica, os períodos de expansão, estagnação e recessão, refletindo os impactos de eventos econômicos, políticos e financeiros tanto domésticos quanto globais.
 
-Entre os períodos de destaque, observa-se:
+Entre esses períodos, observamos que:
 
--   Fortes oscilações nos anos 1980 e início dos 1990, marcadas por hiperinflação e instabilidade econômica;
+- Houve um forte crescimento na década de 1980, impulsionado por reformas econômicas e políticas fiscais expansionistas;
 
--   Redução progressiva da taxa a partir dos anos 2000, em função da consolidação do regime de metas de inflação;
+- Teve uma queda acentuada no início dos anos 1990, associada à recessão e ajuste fiscal;
 
--   Picos de elevação em momentos de crise, como em 2002 (crise eleitoral/câmbio) e em 2008 (crise financeira global).
+- Expansão robusta no final dos anos 1990 e início dos anos 2000, seguida pela desaceleração causada pela bolha da internet e os atentados de 2001;
 
-O uso de pontos sobre a linha reforça visualmente cada observação temporal, enquanto a legenda dinâmica apresenta a **data exata** de cada ponto ao longo da animação. A escala vertical foi ajustada para exibir as taxas em **valores reais percentuais ao dia**, facilitando a interpretação precisa dos dados.
+- Com uma forte retração em 2008–2009, consequência direta da crise financeira global, com recuperação gradual nos anos seguintes.
 
-Esse tipo de visualização torna o comportamento histórico da taxa CDI **mais intuitivo, acessível e visualmente envolvente**, sendo uma ferramenta eficaz tanto para análise acadêmica quanto para apresentações didáticas.
+O uso de pontos sobre a linha reforça cada observação temporal, enquanto a legenda destaca a data exata que corresponde a cada ponto da série. A escala na vertical foi ajustada para exibir as variações percentuais reais do PIB, facilitando a leitura e a compreensão dos dados.
+
+Esse tipo de visualização permite interpretar de maneira mais acessível, intuitiva e envolvente a trajetória da economia dos Estados Unidos, sendo uma ferramenta fundamental para análises acadêmicas, apresentações econômicas e estudos comparativos internacionais.
+
+
 
 ```{r}
 #| label: dadospib
