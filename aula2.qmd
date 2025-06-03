@@ -14,7 +14,7 @@ library(gganimate)
 library(scales)
 library(lubridate)
 
-# Buscar série CDI do BCB
+# Buscar série PIB do BCB
 my.id <- c(tcpib = 3711)
 
 df.bcb <- gbcbd_get_series(
